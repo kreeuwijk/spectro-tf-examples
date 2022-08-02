@@ -1,0 +1,28 @@
+manifests:
+  storageclass:
+    # Storage Class Name
+    storageClassName: "spectro-storage-class-efs"
+
+    #Toggle for Default class
+    isDefaultClass: "false"
+
+    parameters:
+      #Check https://github.com/kubernetes-sigs/aws-efs-csi-driver for details
+      # File System under which access points are created.
+      # This is a mandatory field and needs to be set to pre-created EFS volume. Other values can be at default setting
+      fileSystemId: "${fs_id}"
+      
+      # Type of volume provisioned by efs. Currently, Access Points are supported.
+      provisioningMode: "efs-ap"
+
+      # Directory permissions for Access Point root directory creation 
+      directoryPerms: 700
+
+      # Start range of the POSIX group Id to be applied for Access Point root directory creation  (optional). 
+      gidRangeStart: 1000
+
+      # End range of the POSIX group Id  (optional)
+      gidRangeEnd: 2000
+
+      # Path under which access points for dynamic provisioning is created. If this parameter is not specified, access points are created under the root directory of the file system
+      basePath: "/base_efs"
