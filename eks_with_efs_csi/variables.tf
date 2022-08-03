@@ -15,4 +15,4 @@ variable "sc_project_name" {
 }
 
 variable "sc_eks_cluster_name" {}
-
+variable "aws_account_number" {}

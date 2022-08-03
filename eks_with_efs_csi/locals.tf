@@ -1,22 +1,23 @@
+data "spectrocloud_cluster_profile" "dev-eks" {
+  # This profile needs to contain the "csi-aws-ebs" and "csi-aws-efs-add-on" packs
+  name    = "Dev-EKS"
+  version = "1.0.0"
+}
+
 locals {
-  eks_profile_map = {
-    "Dev-EKS" = {
-      id = data.spectrocloud_cluster_profile.dev-eks.id
-      minimum_state = 0
-      packs = []
-    }
-    "Dev-EKS-EFS" = {
-      id = data.spectrocloud_cluster_profile.dev-eks-efs.id
-      minimum_state = 1
-      packs = [
+  eks_profiles = [
+    {
+      id            = data.spectrocloud_cluster_profile.dev-eks.id
+      packs         = [
         {
-          name = "aws-efs"
-          tag  = "1.3.6"
+          name = "csi-aws-efs-add-on"
+          tag  = "1.4.0"
           values = templatefile("./config/efs.yaml", {
-            fs_id : length(aws_efs_file_system.efs) > 0 ? aws_efs_file_system.efs[0].id : "null"
+            fs-id        : aws_efs_file_system.efs.id,
+            efs-role-arn : "arn:aws:iam::${var.aws_account_number}:role/EFS-CSI-Driver-Role-${var.sc_eks_cluster_name}"
           })
         }
       ]
     }
-  }
+  ]
 }

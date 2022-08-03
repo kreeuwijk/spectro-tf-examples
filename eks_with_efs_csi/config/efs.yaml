@@ -1,28 +1,141 @@
-manifests:
-  storageclass:
-    # Storage Class Name
-    storageClassName: "spectro-storage-class-efs"
+charts:
+  aws-efs-csi-driver:
+    # Default values for aws-efs-csi-driver.
+    # Declare variables to be passed into your templates.
 
-    #Toggle for Default class
-    isDefaultClass: "false"
+    nameOverride: ""
+    fullnameOverride: ""
 
-    parameters:
-      #Check https://github.com/kubernetes-sigs/aws-efs-csi-driver for details
-      # File System under which access points are created.
-      # This is a mandatory field and needs to be set to pre-created EFS volume. Other values can be at default setting
-      fileSystemId: "${fs_id}"
-      
-      # Type of volume provisioned by efs. Currently, Access Points are supported.
-      provisioningMode: "efs-ap"
+    replicaCount: 1
 
-      # Directory permissions for Access Point root directory creation 
-      directoryPerms: 700
+    image:
+      repository: amazon/aws-efs-csi-driver
+      tag: "v1.4.0"
+      pullPolicy: IfNotPresent
 
-      # Start range of the POSIX group Id to be applied for Access Point root directory creation  (optional). 
-      gidRangeStart: 1000
+    storageClasses:
+    - name: spectro-storage-class-efs
+      annotations:
+        # Use that annotation if you want this to your default storageclass
+        storageclass.kubernetes.io/is-default-class: "false"
+      mountOptions:
+      - tls
+      parameters:
+        # Enter your pre-created EFS filesystem ID, e.g. "fs-0f660ce96fb33ff3a"
+        fileSystemId: "${fs-id}"
+        provisioningMode: efs-ap
+        directoryPerms: "700"
+        gidRangeStart: "1000"
+        gidRangeEnd: "2000"
+        basePath: "/dynamic_provisioning"
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
 
-      # End range of the POSIX group Id  (optional)
-      gidRangeEnd: 2000
+    sidecars:
+      livenessProbe:
+        image:
+          repository: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe
+          tag: v2.2.0-eks-1-18-13
+          pullPolicy: IfNotPresent
+        resources: {}
+      nodeDriverRegistrar:
+        image:
+          repository: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar
+          tag: v2.1.0-eks-1-18-13
+          pullPolicy: IfNotPresent
+        resources: {}
+      csiProvisioner:
+        image:
+          repository: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner
+          tag: v2.1.1-eks-1-18-13
+          pullPolicy: IfNotPresent
+        resources: {}
 
-      # Path under which access points for dynamic provisioning is created. If this parameter is not specified, access points are created under the root directory of the file system
-      basePath: "/base_efs"
+    imagePullSecrets: []
+
+    ## Controller deployment variables
+
+    controller:
+      # Specifies whether a deployment should be created
+      create: true
+      # Number for the log level verbosity
+      logLevel: 2
+      # If set, add pv/pvc metadata to plugin create requests as parameters.
+      extraCreateMetadata: true
+      # Add additional tags to access points
+      tags:
+        {}
+        # environment: prod
+        # region: us-east-1
+      # Enable if you want the controller to also delete the
+      # path on efs when deleteing an access point
+      deleteAccessPointRootDir: false
+      volMetricsOptIn: false
+      podAnnotations: {}
+      resources:
+        {}
+        # We usually recommend not to specify default resources and to leave this as a conscious
+        # choice for the user. This also increases chances charts run on environments with little
+        # resources, such as Minikube. If you do want to specify resources, uncomment the following
+        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+        # limits:
+        #   cpu: 100m
+        #   memory: 128Mi
+        # requests:
+        #   cpu: 100m
+        #   memory: 128Mi
+      nodeSelector: {}
+      tolerations: []
+      affinity: {}
+      # Specifies whether a service account should be created
+      serviceAccount:
+        create: true
+        name: efs-csi-controller-sa
+        annotations:
+          ## Enable if EKS IAM for SA is used
+          eks.amazonaws.com/role-arn: ${efs-role-arn}
+      healthPort: 9909
+      regionalStsEndpoints: false
+    ## Node daemonset variables
+
+    node:
+      # Number for the log level verbosity
+      logLevel: 2
+      hostAliases:
+        {}
+        # For cross VPC EFS, you need to poison or overwrite the DNS for the efs volume as per
+        # https://docs.aws.amazon.com/efs/latest/ug/efs-different-vpc.html#wt6-efs-utils-step3
+        # implementing the suggested solution found here:
+        # https://github.com/kubernetes-sigs/aws-efs-csi-driver/issues/240#issuecomment-676849346
+        # EFS Vol ID, IP, Region
+        # "fs-01234567":
+        #   ip: 10.10.2.2
+        #   region: us-east-2
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        {}
+        # Example config which uses the AWS nameservers
+        # dnsPolicy: "None"
+        # dnsConfig:
+        #   nameservers:
+        #     - 169.254.169.253
+      podAnnotations: {}
+      resources:
+        {}
+        # limits:
+        #   cpu: 100m
+        #   memory: 128Mi
+        # requests:
+        #   cpu: 100m
+        #   memory: 128Mi
+      nodeSelector: {}
+      tolerations:
+        - operator: Exists
+      # Specifies whether a service account should be created
+      serviceAccount:
+        create: true
+        name: efs-csi-node-sa
+        annotations:
+        ## Enable if EKS IAM for SA is used
+          eks.amazonaws.com/role-arn: ${efs-role-arn}
+      healthPort: 9809
