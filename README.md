@@ -1,7 +1,7 @@
 # spectro-tf-examples
 Terraform examples for Spectrocloud Palette
 
-## aws_with_abs_and_efs_csi
+## aws_with_ebs_and_efs_csi
 Demonstrates deployment of a Kubernetes cluster on AWS EC2, including auto-configuration of AWS EBS for block storage PVs and AWS EFS for file storage PVs.
 
 The Terraform run will create the following resources:
@@ -15,7 +15,7 @@ The Terraform run will create the following resources:
 To ensure the EFS and EBS CSIs are ready immediately after cluster deployment, Terraform will:
 * inject the Filesystem ID of the created EFS filesystem into the `cs-aws-efs` pack
 
-## eks_with_abs_and_efs_csi
+## eks_with_ebs_and_efs_csi
 Demonstrates deployment of a AWS EKS cluster, including auto-configuration of AWS EBS for block storage PVs and AWS EFS for file storage PVs.
 
 The Terraform run will create the following resources:
