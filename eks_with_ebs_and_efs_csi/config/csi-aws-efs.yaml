@@ -1,3 +1,6 @@
+pack:
+  namespace: "kube-system"
+
 charts:
   aws-efs-csi-driver:
     # Default values for aws-efs-csi-driver.
