@@ -30,7 +30,7 @@ resource "spectrocloud_cluster_eks" "cluster" {
   machine_pool {
     name          = "worker-pool"
     min           = 1
-    count         = 1
+    count         = 2
     max           = 3
     instance_type = "t3.large"
     disk_size_gb  = 60
