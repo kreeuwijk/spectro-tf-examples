@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "eks-efs-csi-policy" {
-  name        = "EFS-CSI-Driver-${var.sc_eks_cluster_name}"
+  name        = "EFS-CSI-Driver-Policy"
   description = "Policy to enable AWS EFS CSI on EKS cluster."
   policy      = <<EOF
 {
