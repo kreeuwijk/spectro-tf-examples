@@ -23,8 +23,8 @@ resource "spectrocloud_cluster_aws" "cluster" {
   }
 
   cloud_config {
-    ssh_key_name = "kevinr-eu-west-3"
     region = "eu-west-3"
+    ssh_key_name = "kevinr-eu-west-3"
   }
 
   machine_pool {

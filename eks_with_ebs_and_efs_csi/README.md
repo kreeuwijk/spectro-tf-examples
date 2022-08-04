@@ -16,5 +16,9 @@ Pre-work:
   * Set `sc_api_key` to the Palette API key you created earlier
   * set `aws_account_number` to the number of your AWS account 
 
-3. Run `terraform init` in this folder
-4. Run `terraform apply` to create the infrastructure
+3. Update `resource_cluster_aws.tf`:
+  * Set `region` on line 26 to the same region as you set in `providers.tf`
+  * Set `ssh_key_name` on line 27 to a valid SSH key in this AWS region (or remove this setting altogether if you don't need an SSH key injected)
+
+4. Run `terraform init` in this folder
+5. Run `terraform apply` to create the infrastructure
