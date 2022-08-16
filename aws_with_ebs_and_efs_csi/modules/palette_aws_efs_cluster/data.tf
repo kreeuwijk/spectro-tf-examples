@@ -6,10 +6,6 @@ data "spectrocloud_registry" "registry" {
   name = "Public Repo"
 }
 
-data "spectrocloud_registry" "registry2" {
-  name = "Dreamworx Packs"
-}
-
 data "spectrocloud_pack" "os" {
   name           = "ubuntu-aws"
   registry_uid   = data.spectrocloud_registry.registry.id
@@ -30,13 +26,13 @@ data "spectrocloud_pack" "cni" {
 
 data "spectrocloud_pack" "csi" {
   name = "csi-aws-ebs"
-  registry_uid = data.spectrocloud_registry.registry2.id
+  registry_uid = data.spectrocloud_registry.registry.id
   version  = "1.8.0"
 }
 
 data "spectrocloud_pack" "efs" {
   name = "csi-aws-efs-add-on"
-  registry_uid = data.spectrocloud_registry.registry2.id
+  registry_uid = data.spectrocloud_registry.registry.id
   version  = "1.4.0"
 }
 
