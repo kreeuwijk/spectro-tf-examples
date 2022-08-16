@@ -95,7 +95,6 @@ charts:
         create: true
         name: efs-csi-controller-sa
         annotations:
-          ## Enable if EKS IAM for SA is used
           eks.amazonaws.com/role-arn: ${efs-role-arn}
       healthPort: 9909
       regionalStsEndpoints: false
@@ -138,7 +137,5 @@ charts:
       serviceAccount:
         create: true
         name: efs-csi-node-sa
-        annotations:
-        ## Enable if EKS IAM for SA is used
-          eks.amazonaws.com/role-arn: ${efs-role-arn}
+        annotations: {}
       healthPort: 9809

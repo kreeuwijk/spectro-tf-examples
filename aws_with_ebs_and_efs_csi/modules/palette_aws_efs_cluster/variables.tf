@@ -1,0 +1,10 @@
+variable "name" {}
+variable "cloudaccount" {}
+variable "region" {}
+variable "sshkey" {}
+variable "master_count" {}
+variable "master_instance_type" {}
+variable "master_disk_size_gb" {}
+variable "worker_count" {}
+variable "worker_instance_type" {}
+variable "worker_disk_size_gb" {}

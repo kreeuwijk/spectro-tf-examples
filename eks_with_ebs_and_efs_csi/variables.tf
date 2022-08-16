@@ -14,5 +14,14 @@ variable "sc_project_name" {
   default     = "Default"
 }
 
-variable "sc_eks_cluster_name" {}
-variable "aws_account_number" {}
+variable "aws_region" {
+  description = "AWS region to deploy to"
+}
+
+variable "aws_profile" {
+  description = "AWS profile to use from ~/.aws/credentials"
+}
+
+variable "aws_rolearn" {
+  description = "AWS IAM Role ARN of the role created for Palette"
+}

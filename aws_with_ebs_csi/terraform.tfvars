@@ -1,6 +1,6 @@
 sc_host         = "api.spectrocloud.com"
 sc_api_key      = "your Palette API key" # or use export TF_VAR_sc_api_key"
 sc_project_name = "Default"
-aws_region      = "eu-west-2"
+aws_region      = "eu-north-1"
 aws_profile     = "default"
 aws_rolearn     = "arn:aws:iam::<account>:role/<role>"
