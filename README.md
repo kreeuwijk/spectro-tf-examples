@@ -22,6 +22,16 @@ The Terraform run will create the following resources:
 To ensure the EFS and EBS CSIs are ready immediately after cluster deployment, Terraform will:
 * inject the Filesystem ID of the created EFS filesystem into the `csi-aws-efs-add-on` pack
 
+## eks_with_ebs_csi
+Demonstrates deployment of a AWS EKS cluster, including auto-configuration of AWS EBS for block storage PVs.
+
+The Terraform run will create the following resources:
+* An IAM IRSA Role for the EKS cluster, attaching the AWS-owned EBS CSI driver policy to this role and allowing access to the EKS cluster's OIDC identity
+* An EKS cluster (2 worker nodes), using Spectrocloud Palette for deployment
+
+To ensure the EBS CSI is ready immediately after cluster deployment, Terraform will:
+* inject the EKS IRSA role ARN that contains the IAM Policy for the EBS CSI driver into an annotation for the CSI ServiceAccount
+
 ## eks_with_ebs_and_efs_csi
 Demonstrates deployment of a AWS EKS cluster, including auto-configuration of AWS EBS for block storage PVs and AWS EFS for file storage PVs.
 
