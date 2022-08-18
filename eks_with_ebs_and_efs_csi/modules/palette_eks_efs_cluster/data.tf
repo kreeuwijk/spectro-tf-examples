@@ -31,7 +31,7 @@ data "spectrocloud_pack" "csi" {
 }
 
 data "spectrocloud_pack" "efs" {
-  name = "csi-aws-efs-add-on"
+  name = "aws-efs"
   registry_uid = data.spectrocloud_registry.registry.id
   version  = "1.4.0"
 }
