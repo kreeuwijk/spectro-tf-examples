@@ -19,7 +19,7 @@ resource "spectrocloud_cluster_aws" "cluster" {
     count                   = var.master_count
     instance_type           = var.master_instance_type
     disk_size_gb            = var.master_disk_size_gb
-    azs                     = ["${var.region}a","${var.region}b","${var.region}c"]
+    azs                     = var.azs
   }
 
   machine_pool {
@@ -27,7 +27,7 @@ resource "spectrocloud_cluster_aws" "cluster" {
     count         = var.worker_count
     instance_type = var.worker_instance_type
     disk_size_gb  = var.worker_disk_size_gb
-    azs           = ["${var.region}a","${var.region}b","${var.region}c"]
+    azs           = var.azs
   }
 
 }

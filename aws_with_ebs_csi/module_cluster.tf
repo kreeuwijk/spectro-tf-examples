@@ -7,6 +7,7 @@ module "example-cluster" {
 
   # AWS region and SSH key to use
   region = var.aws_region
+  azs    = ["${var.aws_region}a","${var.aws_region}b","${var.aws_region}c"]
   sshkey = "your_AWS_ssh_key_name"
 
   # Cluster size: master pool

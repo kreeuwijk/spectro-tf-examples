@@ -36,7 +36,7 @@ resource "spectrocloud_cluster_eks" "cluster" {
     max           = var.worker_max
     instance_type = var.worker_instance_type
     disk_size_gb  = var.worker_disk_size_gb
-    azs           = ["${var.region}a","${var.region}b","${var.region}c"]
+    azs           = var.azs
   }
 
 }

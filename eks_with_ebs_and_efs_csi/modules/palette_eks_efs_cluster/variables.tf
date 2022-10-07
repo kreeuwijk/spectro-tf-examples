@@ -7,3 +7,4 @@ variable "worker_count" {}
 variable "worker_max" {}
 variable "worker_instance_type" {}
 variable "worker_disk_size_gb" {}
+variable "azs" {}

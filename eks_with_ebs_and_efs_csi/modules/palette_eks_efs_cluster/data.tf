@@ -38,14 +38,6 @@ data "spectrocloud_pack" "efs" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_availability_zones" "available" {
-  state = "available"
-  filter {
-    name   = "region-name"
-    values = [var.region]
-  }
-}
-
 data "aws_vpc" "this" {
   tags  = {
     Name = "${spectrocloud_cluster_eks.cluster.name}-vpc"
